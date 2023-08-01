@@ -43,14 +43,14 @@ class _MyAppState extends State<MyApp> {
             debugPrint('BannerAdListener onShowLandingScreen!!!');
           },
         ),
-        adInfo: const AdInfo("tIw5rIqr", BannerHeightEnum.adaptive, 320, 50))
+        adInfo: const AdInfo("YOUR_CAULY_APP_CODE", BannerHeightEnum.adaptive, 320, 50))
       ..load();
   }
 
   void _createInterstitialAd() {
     InterstitialAd.load(
         adInfo: const AdInfo(
-            "tIw5rIqr",
+            "YOUR_CAULY_APP_CODE",
             BannerHeightEnum.adaptive,
             320,
             50),
