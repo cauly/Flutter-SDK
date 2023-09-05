@@ -32,7 +32,7 @@
 # 1. CAULY Flutter Plugin 시작하기
 이 프로젝트는 Cauly Android SDK Flutter 연동 예제 프로젝트입니다.
 Flutter 예제는 Flutter Plugin 프로젝트이며, Android 5.0(Lollipop, API Level 21) 이상 기기와 JDK 11 이상에서 동작합니다.
-최신 버전의 Cauly Android SDK 사용을 권장합니다.(최신버전: 3.5.25)
+최신 버전의 Cauly Android SDK 사용을 권장합니다.(최신버전: 3.5.26)
 최신 버전의 Android Studio와 Visual Studio Code 사용을 권장합니다. Eclipse에 대한 기술 지원은 하지 않습니다.
 
 ### Flutter 설치 경로 확인 및 추가
@@ -70,7 +70,7 @@ Flutter Plugin 프로젝트루트경로/android/local.properties 파일에 flutt
  	dependencies {
 	implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
 	implementation 'com.google.android.gms:play-services-appset:16.0.0'
-    implementation 'com.fsn.cauly:cauly-sdk:3.5.25' 
+    implementation 'com.fsn.cauly:cauly-sdk:3.5.26' 
     }
 	```
 

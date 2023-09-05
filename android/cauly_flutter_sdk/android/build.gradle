@@ -40,7 +40,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 30524
-        versionName "3.5.24"
+        versionName "3.5.26"
     }
 }
 
@@ -52,7 +52,7 @@ dependencies{
     // Google play service 디펜던시 for App Set ID.
     implementation 'com.google.android.gms:play-services-appset:16.0.0'
 
-    implementation 'com.fsn.cauly:cauly-sdk:3.5.24'
+    implementation 'com.fsn.cauly:cauly-sdk:3.5.26'
 
 //    implementation files('/Users/junhojohn/flutter/bin/cache/artifacts/engine/android-arm64/flutter.jar')
 }
