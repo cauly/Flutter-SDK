@@ -4,19 +4,18 @@
  Flutter Native View 생성을 위한 클래스
  */
 @implementation FLNativeViewFactory {
-    NSObject<FlutterBinaryMessenger>* _messenger;
-    FlutterMethodChannel* _initializeChannel;
+
     FLNativeView* _flNativeView;
 }
 
 /**
  Flutter Native View Factory 초기화 메서드
  */
-- (instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)messenger initializeChannel:(FlutterMethodChannel *)initializeChannel {
+- (instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)flutterBinaryMessenger flutterMethodChannel:(FlutterMethodChannel *)flutterMethodChannel {
   self = [super init];
   if (self) {
-    _messenger = messenger;
-    _initializeChannel = initializeChannel;
+    _flutterBinaryMessenger = flutterBinaryMessenger;
+    _flutterMethodChannel = flutterMethodChannel;
   }
   return self;
 }
@@ -33,7 +32,7 @@
     _flNativeView = [[FLNativeView alloc] initWithFrame:frame
                                         viewIdentifier:viewId
                                              arguments:args
-                                        binaryMessenger:_messenger];
+                                        binaryMessenger:_flutterBinaryMessenger];
     
     // 2. Set CaulyAdView callbacks to FlutterNativeViewFactory
     _flNativeView.caulyAdView.delegate = self;
@@ -57,36 +56,36 @@
 // 배너 광고 정보 수신 성공
 - (void)didReceiveAd:(CaulyAdView *)adView isChargeableAd:(BOOL)isChargeableAd {
     NSLog(@"[HelloCauly]didReceiveAd");
-    [_initializeChannel invokeMethod:@"onReceiveAd" arguments:nil];
+    [_flutterMethodChannel invokeMethod:@"onReceiveAd" arguments:nil];
 }
 
 // 배너 광고 정보 수신 실패
 - (void)didFailToReceiveAd:(CaulyAdView *)adView errorCode:(int)errorCode errorMsg:(NSString *)errorMsg {
     NSLog(@"[HelloCauly]didFailToReceiveAd : %d(%@)", errorCode, errorMsg);
-    [_initializeChannel invokeMethod:@"onFailToReceiveAd" arguments:nil];
+    [_flutterMethodChannel invokeMethod:@"onFailToReceiveAd" arguments:nil];
 }
 
 // fullsite 혹은 rich 배너 광고 랜딩 화면 표시
 - (void)willShowLandingView:(CaulyAdView *)adView {
     NSLog(@"[HelloCauly]willShowLandingView");
-    [_initializeChannel invokeMethod:@"onWillShowLandingView" arguments:nil];
+    [_flutterMethodChannel invokeMethod:@"onWillShowLandingView" arguments:nil];
 }
 
 // fullsite 혹은 rich 배너 광고 랜딩 화면 닫음
 - (void)didCloseLandingView:(CaulyAdView *)adView {
     NSLog(@"[HelloCauly]didCloseLandingView");
-    [_initializeChannel invokeMethod:@"onDidCloseLandingView" arguments:nil];
+    [_flutterMethodChannel invokeMethod:@"onDidCloseLandingView" arguments:nil];
 }
 
 #pragma - CaulyNativeAdDelegate
 - (void)didReceiveNativeAd:(CaulyNativeAd *)nativeAd isChargeableAd:(BOOL)isChargeableAd{
     NSLog(@"[HelloCauly]didReceiveNativeAd");
-    [_initializeChannel invokeMethod:@"onDidReceiveNativeAd" arguments:nil];
+    [_flutterMethodChannel invokeMethod:@"onDidReceiveNativeAd" arguments:nil];
 }
 
 -(void)didFailToReceiveNativeAd:(CaulyNativeAd *)nativeAd errorCode:(int)errorCode errorMsg:(NSString *)errorMsg{
     NSLog(@"[HelloCauly]didFailToReceiveNativeAd");
-    [_initializeChannel invokeMethod:@"onDidFailToReceiveNativeAd" arguments:nil];
+    [_flutterMethodChannel invokeMethod:@"onDidFailToReceiveNativeAd" arguments:nil];
 }
 
 @end
@@ -95,10 +94,7 @@
 /**
  Flutter Native View 클래스
  */
-@implementation FLNativeView {
-    UIView *_view;
-    CaulyAdView *_caulyAdView;
-}
+@implementation FLNativeView
 
 /**
  Flutter Native View 초기화 메서드
@@ -129,20 +125,6 @@
 //      printf(@"args = %@ ", args[0]);
   }
   return self;
-}
-
-/**
- Flutter Native View의 루트 뷰 getter
- */
-- (UIView*)view {
-  return _view;
-}
-
-/**
- 루트 뷰에 속한 CaulyAdView getter
- */
--(CaulyAdView*)caulyAdView {
-    return _caulyAdView;
 }
 
 @end
