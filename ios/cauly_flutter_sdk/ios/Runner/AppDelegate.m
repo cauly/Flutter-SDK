@@ -131,7 +131,7 @@ Cauly Banner 혹은 Interstitial 광고 호출 전 CaulyAdSetting 호출하여 �
     
     NSLog(@"[HelloCauly]CaulyAdSetting for Flutter has been finished successfully.");
     
-    return [NSString stringWithFormat:@"CaulyAdSetting: appId=%@ appCode=%@ animType=%d adSize=%d reloadTime=%d useDynamicReloadTime=%d closeOnLanding=%d", _caulyAdSetting.appId, _caulyAdSetting.appCode, _caulyAdSetting.animType, _caulyAdSetting.reloadTime, (int)_caulyAdSetting.useDynamicReloadTime, (int)_caulyAdSetting.closeOnLanding];
+    return [NSString stringWithFormat:@"CaulyAdSetting: appId=%@ appCode=%@ animType=%d adSize=%d reloadTime=%d useDynamicReloadTime=%d closeOnLanding=%d", _caulyAdSetting.appId, _caulyAdSetting.appCode, _caulyAdSetting.animType, _caulyAdSetting.adSize, _caulyAdSetting.reloadTime, (int)_caulyAdSetting.useDynamicReloadTime, (int)_caulyAdSetting.closeOnLanding];
 }
 
 - (void) requestInterstitialAd {
