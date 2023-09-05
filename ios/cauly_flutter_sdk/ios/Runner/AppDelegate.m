@@ -70,9 +70,9 @@
 
         } else if([@"showInterstitialAd" isEqualToString:call.method]) {
             NSLog(@"[HelloCauly]AppDelegate showInterstitialAd() start.");
-            if(_caulyInterstitialAdCallback != nil) {
+            if(self -> _caulyInterstitialAdCallback != nil) {
                 NSLog(@"[HelloCauly]CaulyInterstitialCallback.show() started.");
-                [_caulyInterstitialAdCallback show];
+                [self -> _caulyInterstitialAdCallback show];
                 NSLog(@"[HelloCauly]CaulyInterstitialCallback.show() finished.");
             }
             NSLog(@"[HelloCauly]AppDelegate showInterstitialAd() finished.");
