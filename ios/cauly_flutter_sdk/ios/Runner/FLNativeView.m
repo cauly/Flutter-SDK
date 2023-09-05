@@ -5,16 +5,18 @@
  */
 @implementation FLNativeViewFactory {
     NSObject<FlutterBinaryMessenger>* _messenger;
+    FlutterMethodChannel* _initializeChannel;
     FLNativeView* _flNativeView;
 }
 
 /**
  Flutter Native View Factory 초기화 메서드
  */
-- (instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)messenger {
+- (instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)messenger initializeChannel:(FlutterMethodChannel *)initializeChannel {
   self = [super init];
   if (self) {
     _messenger = messenger;
+    _initializeChannel = initializeChannel;
   }
   return self;
 }
@@ -54,31 +56,37 @@
 #pragma - CaulyAdViewDelegate
 // 배너 광고 정보 수신 성공
 - (void)didReceiveAd:(CaulyAdView *)adView isChargeableAd:(BOOL)isChargeableAd {
-  NSLog(@"[HelloCauly]didReceiveAd");
+    NSLog(@"[HelloCauly]didReceiveAd");
+    [_initializeChannel invokeMethod:@"onReceiveAd" arguments:nil];
 }
 
 // 배너 광고 정보 수신 실패
 - (void)didFailToReceiveAd:(CaulyAdView *)adView errorCode:(int)errorCode errorMsg:(NSString *)errorMsg {
-  NSLog(@"[HelloCauly]didFailToReceiveAd : %d(%@)", errorCode, errorMsg);
+    NSLog(@"[HelloCauly]didFailToReceiveAd : %d(%@)", errorCode, errorMsg);
+    [_initializeChannel invokeMethod:@"onFailToReceiveAd" arguments:nil];
 }
 
 // fullsite 혹은 rich 배너 광고 랜딩 화면 표시
 - (void)willShowLandingView:(CaulyAdView *)adView {
-  NSLog(@"[HelloCauly]willShowLandingView");
+    NSLog(@"[HelloCauly]willShowLandingView");
+    [_initializeChannel invokeMethod:@"onWillShowLandingView" arguments:nil];
 }
 
 // fullsite 혹은 rich 배너 광고 랜딩 화면 닫음
 - (void)didCloseLandingView:(CaulyAdView *)adView {
-  NSLog(@"[HelloCauly]didCloseLandingView");
+    NSLog(@"[HelloCauly]didCloseLandingView");
+    [_initializeChannel invokeMethod:@"onDidCloseLandingView" arguments:nil];
 }
 
 #pragma - CaulyNativeAdDelegate
 - (void)didReceiveNativeAd:(CaulyNativeAd *)nativeAd isChargeableAd:(BOOL)isChargeableAd{
-  NSLog(@"[HelloCauly]didReceiveNativeAd");
+    NSLog(@"[HelloCauly]didReceiveNativeAd");
+    [_initializeChannel invokeMethod:@"onDidReceiveNativeAd" arguments:nil];
 }
 
 -(void)didFailToReceiveNativeAd:(CaulyNativeAd *)nativeAd errorCode:(int)errorCode errorMsg:(NSString *)errorMsg{
-  NSLog(@"[HelloCauly]didFailToReceiveNativeAd");
+    NSLog(@"[HelloCauly]didFailToReceiveNativeAd");
+    [_initializeChannel invokeMethod:@"onDidFailToReceiveNativeAd" arguments:nil];
 }
 
 @end

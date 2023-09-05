@@ -5,7 +5,7 @@
 #import "CaulyNativeAd.h"
 
 @interface FLNativeViewFactory : NSObject <FlutterPlatformViewFactory, CaulyAdViewDelegate, CaulyNativeAdDelegate>
-- (instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)messenger;
+- (instancetype)initWithMessenger:(NSObject<FlutterBinaryMessenger>*)messenger initializeChannel:(FlutterMethodChannel *)initializeChannel;
 @end
 
 @interface FLNativeView : NSObject <FlutterPlatformView>

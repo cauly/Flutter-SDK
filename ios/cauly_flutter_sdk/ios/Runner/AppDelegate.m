@@ -60,7 +60,7 @@
             
             // send result
             if ([caulyAdSettingDesc length] != 0) {
-                [self requestInterstitialAd:controller];
+                [self requestInterstitialAd:controller initializeChannel:initializeChannel];
                 result(caulyAdSettingDesc);
             } else {
                 result([FlutterError errorWithCode:@"UNAVAILABLE"
@@ -90,7 +90,7 @@
 
     // 4. initialize flutter native view factory
     FLNativeViewFactory* factory =
-       [[FLNativeViewFactory alloc] initWithMessenger:registrar.messenger];
+    [[FLNativeViewFactory alloc] initWithMessenger:registrar.messenger initializeChannel:initializeChannel];
     [registrar registerViewFactory:factory withId:@"bannerViewType"];
     
     // 5. return
@@ -135,7 +135,7 @@ Cauly Banner 혹은 Interstitial 광고 호출 전 CaulyAdSetting 호출하여 �
     return [NSString stringWithFormat:@"CaulyAdSetting: appId=%@ appCode=%@ animType=%d adSize=%d reloadTime=%d useDynamicReloadTime=%d closeOnLanding=%d", _adSetting.appId, _adSetting.appCode, _adSetting.animType, _adSetting.reloadTime, (int)_adSetting.useDynamicReloadTime, (int)_adSetting.closeOnLanding];
 }
 
-- (void) requestInterstitialAd: (FlutterViewController*)controller {
+- (void) requestInterstitialAd: (FlutterViewController*)controller initializeChannel:(FlutterMethodChannel *)initializeChannel{
     
     NSLog(@"[HelloCauly]AppDelegate requestInterstitialAd");
     if (_caulyInterstitialAd) {
@@ -144,7 +144,8 @@ Cauly Banner 혹은 Interstitial 광고 호출 전 CaulyAdSetting 호출하여 �
 
     NSLog(@"[HelloCauly]CaulyInterstitialAd initWithParentViewController() start.");
     _caulyInterstitialAd = [[CaulyInterstitialAd alloc] initWithParentViewController:controller];  // 전면 광고 객체 생성
-    _caulyInterstitialAdCallback = [[CaulyInterstitialAdCallback alloc]init:_caulyInterstitialAd]; // 전면 delegate 설정
+    
+    _caulyInterstitialAdCallback = [[CaulyInterstitialAdCallback alloc] init:_caulyInterstitialAd initializeChannel:initializeChannel]; // 전면 delegate 설정
     _caulyInterstitialAd.delegate = _caulyInterstitialAdCallback;
     NSLog(@"[HelloCauly]CaulyInterstitialAd initWithParentViewController() finish.");
     
@@ -157,10 +158,11 @@ Cauly Banner 혹은 Interstitial 광고 호출 전 CaulyAdSetting 호출하여 �
 
 @implementation CaulyInterstitialAdCallback
 
-- (instancetype)init:(CaulyInterstitialAd*)caulyInterstitialAd {
+- (instancetype)init:(CaulyInterstitialAd*)caulyInterstitialAd initializeChannel:(FlutterMethodChannel *)initializeChannel {
     self = [super init];
     if (self) {
         _caulyInterstitialAd = caulyInterstitialAd;
+        _initializeChannel = initializeChannel;
     }
     return self;
 }
@@ -173,23 +175,23 @@ Cauly Banner 혹은 Interstitial 광고 호출 전 CaulyAdSetting 호출하여 �
 - (void)didReceiveInterstitialAd:(CaulyInterstitialAd *)interstitialAd isChargeableAd:(BOOL)isChargeableAd{
     NSLog(@"[HelloCauly]didReceiveInterstitialAd");
     _caulyInterstitialAd = interstitialAd;
-    
+    [_initializeChannel invokeMethod:@"onReceiveInterstitialAd" arguments:nil];
 }
 
 - (void)didFailToReceiveInterstitialAd:(CaulyInterstitialAd *)interstitialAd errorCode:(int)errorCode errorMsg:(NSString *)errorMsg{
     NSLog(@"[HelloCauly]didFailToReceiveInterstitialAd");
-    
+    [_initializeChannel invokeMethod:@"onFailToReceiveInterstitialAd" arguments:nil];
 }
 
 - (void)willShowInterstitialAd:(CaulyInterstitialAd *)interstitialAd{
     NSLog(@"[HelloCauly]willShowInterstitialAd");
-    
+    [_initializeChannel invokeMethod:@"onWillShowInterstitialAd" arguments:nil];
 }
 
 - (void)didCloseInterstitialAd:(CaulyInterstitialAd *)interstitialAd{
     NSLog(@"[HelloCauly]didCloseInterstitialAd");
     _caulyInterstitialAd = nil;
-    
+    [_initializeChannel invokeMethod:@"onDidCloseInterstitialAd" arguments:nil];
 }
 
 @end

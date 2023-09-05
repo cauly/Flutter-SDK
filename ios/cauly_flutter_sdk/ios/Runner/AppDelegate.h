@@ -13,6 +13,8 @@
 
 @interface CaulyInterstitialAdCallback : NSObject <CaulyInterstitialAdDelegate>
 @property (strong, nonatomic) CaulyInterstitialAd *caulyInterstitialAd;
-- (instancetype)init:(CaulyInterstitialAd*)caulyInterstitialAd;
+@property (strong, nonatomic) FlutterMethodChannel *initializeChannel;
+- (instancetype)init:(CaulyInterstitialAd*)caulyInterstitialAd initializeChannel:(FlutterMethodChannel *)initializeChannel;
+
 - (void)show;
 @end

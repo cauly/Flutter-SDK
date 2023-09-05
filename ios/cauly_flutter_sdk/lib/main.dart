@@ -73,11 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(
                   onPressed: _initializeInterstitialRequest,
                   child: const Text('Interstitial Request'),
-                ),
-                ElevatedButton(
-                  onPressed: _showInterstitialAd,
-                  child: const Text('Show Interstitial Ad'),
-                ),                
+                ),           
                 Text(_initializeResult),
                 _widget,
               ],
@@ -90,11 +86,45 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _initializeBannerRequest() async {
     String initializeBannerResult;
-    Widget widget;
+    Widget widget = Container();
     try {
       final String result = await platform.invokeMethod('initialize', <String, dynamic>{'identifier':'CAULY', 'code': 'YOUR_CAULY_CODE', 'useDynamicReload': true, 'closeLanding': true });
       initializeBannerResult = 'initialize success! $result %';
+
+      // show banner view 
       widget = _setBannerView();
+
+      // set cauly interstitial ad listener
+      platform.setMethodCallHandler((handler) async {
+        if (handler.method == 'onReceiveAd') {
+          // Do your logic here.
+          initializeBannerResult += ' onReceiveAd';
+          debugPrint('BannerAd onReceiveAd');
+        } else if (handler.method == 'onFailToReceiveAd') {
+          // Do your logic here.
+          initializeBannerResult += ' onFailToReceiveAd';
+          debugPrint('BannerAd onFailToReceiveAd');
+        } else if (handler.method == 'onWillShowLandingView') {
+          // Do your logic here.
+          initializeBannerResult += ' onWillShowLandingView';          
+          debugPrint('BannerAd onWillShowLandingView');
+        } else if (handler.method == 'onDidCloseLandingView') {
+          // Do your logic here.
+          initializeBannerResult += ' onDidCloseLandingView';          
+          debugPrint('BannerAd onDidCloseLandingView');
+        } else if (handler.method == 'onDidReceiveNativeAd') {
+          // Do your logic here.
+          initializeBannerResult += ' onDidReceiveNativeAd';          
+          debugPrint('BannerAd onDidReceiveNativeAd');
+        } else if (handler.method == 'onDidFailToReceiveNativeAd') {
+          // Do your logic here.
+          initializeBannerResult += ' onDidFailToReceiveNativeAd';          
+          debugPrint('BannerAd onDidFailToReceiveNativeAd');
+        } else {
+          initializeBannerResult += ' Unknown method from MethodChannel: ${handler.method}';
+          debugPrint('Unknown method from MethodChannel: ${handler.method}');
+        }
+      });
     } on PlatformException catch (e) {
       initializeBannerResult = "Failed to initialize...: '${e.message}'.";
       widget = Container();
@@ -135,6 +165,34 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       final String result = await platform.invokeMethod('requestInterstitialAd', <String, dynamic>{'identifier':'CAULY', 'code': 'YOUR_CAULY_CODE', 'useDynamicReload': false, 'closeLanding': true });
       initializeInterstitialResult = 'initialize success! $result %';
+
+      // set cauly interstitial ad listener
+      platform.setMethodCallHandler((handler) async {
+        if (handler.method == 'onReceiveInterstitialAd') {
+          // Do your logic here.
+          initializeInterstitialResult += ' onReceiveInterstitialAd';
+          debugPrint('InterstitialAd onReceiveInterstitialAd');
+
+          // show interstitial ad
+          _showInterstitialAd();
+        } else if (handler.method == 'onFailToReceiveInterstitialAd') {
+          // Do your logic here.
+          initializeInterstitialResult += ' onFailToReceiveInterstitialAd';
+          debugPrint('InterstitialAd onFailToReceiveInterstitialAd');
+        } else if (handler.method == 'onWillShowInterstitialAd') {
+          // Do your logic here.
+          initializeInterstitialResult += ' onWillShowInterstitialAd';          
+          debugPrint('InterstitialAd onWillShowInterstitialAd');
+        } else if (handler.method == 'onDidCloseInterstitialAd') {
+          // Do your logic here.
+          initializeInterstitialResult += ' onDidCloseInterstitialAd';          
+          debugPrint('InterstitialAd onDidCloseInterstitialAd');
+        } else {
+          initializeInterstitialResult += ' Unknown method from MethodChannel: ${handler.method}';
+          debugPrint('Unknown method from MethodChannel: ${handler.method}');
+        }
+      });
+
     } on PlatformException catch (e) {
       initializeInterstitialResult = "Failed to initialize...: '${e.message}'.";
     }
