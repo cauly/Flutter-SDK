@@ -11,6 +11,8 @@
  */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    __unsafe_unretained typeof(self) weakSelf = self;
+    
     _flutterViewController = (FlutterViewController*)self.window.rootViewController;
     
     // 1. initialize method
@@ -32,7 +34,7 @@
             CaulyLogLevel logLevel = CaulyLogLevelTrace;
             
             // call Cauly initialize
-            NSString *caulyAdSettingDesc = [self initialize:identifier appCode:code animType:animation adSize:size reloadTime:reloadTime useDynamicReloadTime:useDynamicReload closeOnLanding:closeLanding logLevel:logLevel];
+            NSString *caulyAdSettingDesc = [weakSelf initialize:identifier appCode:code animType:animation adSize:size reloadTime:reloadTime useDynamicReloadTime:useDynamicReload closeOnLanding:closeLanding logLevel:logLevel];
             
             // send result
             if ([caulyAdSettingDesc length] != 0) {
@@ -55,11 +57,11 @@
             CaulyLogLevel logLevel = CaulyLogLevelTrace;
             
             // call Cauly initialize
-            NSString *caulyAdSettingDesc = [self initialize:identifier appCode:code animType:animation adSize:size reloadTime:reloadTime useDynamicReloadTime:useDynamicReload closeOnLanding:closeLanding logLevel:logLevel];
+            NSString *caulyAdSettingDesc = [weakSelf initialize:identifier appCode:code animType:animation adSize:size reloadTime:reloadTime useDynamicReloadTime:useDynamicReload closeOnLanding:closeLanding logLevel:logLevel];
             
             // send result
             if ([caulyAdSettingDesc length] != 0) {
-                [self requestInterstitialAd];
+                [weakSelf requestInterstitialAd];
                 result(caulyAdSettingDesc);
             } else {
                 result([FlutterError errorWithCode:@"UNAVAILABLE"
@@ -72,7 +74,7 @@
             NSLog(@"[HelloCauly]AppDelegate showInterstitialAd() start.");
             if(self -> _caulyInterstitialAdCallback != nil) {
                 NSLog(@"[HelloCauly]CaulyInterstitialCallback.show() started.");
-                [self -> _caulyInterstitialAdCallback show];
+                [weakSelf -> _caulyInterstitialAdCallback show];
                 NSLog(@"[HelloCauly]CaulyInterstitialCallback.show() finished.");
             }
             NSLog(@"[HelloCauly]AppDelegate showInterstitialAd() finished.");
