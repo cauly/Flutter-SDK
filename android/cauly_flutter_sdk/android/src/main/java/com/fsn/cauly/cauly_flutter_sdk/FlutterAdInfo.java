@@ -78,7 +78,7 @@ class FlutterAdInfo {
         if(bannerHeight != null){
             builder.bannerHeight(bannerHeight);
         }
-        if(bannerSizeWidth < 0 && bannerSizeHeight < 0){
+        if(bannerSizeWidth > 0 && bannerSizeHeight > 0){
             builder.setBannerSize(bannerSizeWidth, bannerSizeHeight);
         }
         return builder;
